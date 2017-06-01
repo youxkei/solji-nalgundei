@@ -5,6 +5,7 @@
                 "browsers": "> 5%"
             },
         }],
+        "flow",
     ],
     "plugins": [
         "transform-object-rest-spread",

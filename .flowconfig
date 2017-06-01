@@ -8,3 +8,5 @@
 [libs]
 
 [options]
+experimental.const_params=true
+munge_underscores=true
