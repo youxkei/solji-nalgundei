@@ -1,5 +1,5 @@
 // @flow
-import { Application, Graphics, Sprite, Container, Texture, Point, mesh } from 'pixi.js';
+import { Application, Graphics, Sprite, Container, Texture, Point, mesh, ticker } from 'pixi.js';
 
 const SCREEN_WIDTH  = 1920;
 const SCREEN_HEIGHT = 1080;
@@ -275,7 +275,10 @@ class MeshLaser {
 
 if (!document.body) throw new Error("invalid body");
 
-const app = new Application(SCREEN_WIDTH, SCREEN_HEIGHT, { antialias: true });
+ticker.shared.autoStart = false
+ticker.shared.stop()
+const app = new Application(SCREEN_WIDTH, SCREEN_HEIGHT, { antialias: true, autoStart: false });
+app.ticker.stop()
 
 document.body.appendChild(app.view);
 
@@ -321,7 +324,7 @@ for (let i = 0; i < lasersNum; ++i) {
             angle: Math.PI * 2 / lasersNum * i,
             angleSpeed: 0.02,
             width: 16,
-            borderWidth: 1,
+            borderWidth: 2,
             nodeTexture: {
                 back: backTexture,
                 front: frontTexture,
@@ -346,7 +349,7 @@ for (let i = 0; i < lasersNum; ++i) {
             angle: Math.PI * 2 / lasersNum * i,
             angleSpeed: -0.02,
             width: 16,
-            borderWidth: 1,
+            borderWidth: 2,
             nodeTexture: {
                 back: backTexture,
                 front: frontTexture,
@@ -391,7 +394,8 @@ app.stage.addChild(m);
 let count = 0;
 let previousCount = 0;
 let previousTime = performance.now();
-app.ticker.add(function() {
+
+function main() {
     for (const laser of lasers) {
         laser.move();
     }
@@ -403,4 +407,10 @@ app.ticker.add(function() {
         console.log(Math.floor(60 / (nowTime - previousTime) * 100000) / 100);
         previousTime = nowTime;
     }
-});
+
+  app.render()
+
+  requestAnimationFrame(main)
+}
+
+main()
